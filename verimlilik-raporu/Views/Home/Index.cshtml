@@ -1,0 +1,111 @@
+﻿@model ProductivityResultsViewModel
+
+
+@{
+    ViewData["Title"] = "Home Page";
+
+}
+
+
+
+
+<table id="myTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Müdürlük Adı</th>
+            <th>Makine Tipi</th>
+            <th>Makine Kodu</th>
+            <th>Makine Adı</th>
+            <th>Sinyal tipi</th>
+            <th>Verimlilik metodu</th>
+            <th>tarih</th>
+            <th>Vardiya</th>
+            <th style="background-color:red">Verimlilik (%)</th>
+            <th>Vardiya Süresi (dk)</th>
+            <th>Toplam Teyit (dk)</th>
+            <th>Toplam duruş PD (dk)</th>
+            <th>Toplam duruş A (dk)</th>
+            <th>Toplam duruş P (dk)</th>
+            <th>PERF A (%)</th>
+            <th>PERF P (%)</th>
+            <th>PERF Q (%)</th>
+        </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+
+</table>
+
+
+@section Scripts {
+    @*    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                pagingType: 'full_numbers',
+                scrollX: true,
+
+            });
+        });
+    </script>
+
+
+     <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("GetProductivityResults", "Home")",
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
+                }
+            });
+        });
+    </script>*@
+
+
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                pagingType: 'full_numbers',
+                scrollX: true,
+                ajax: {
+                    type: "POST",
+                    url: "@Url.Action("GetProductivityResults", "Home")",
+                    dataSrc: function (data) {
+                        // do any data manipulation if needed
+
+                        console.log("selamlar", data)
+                        return data.productivityReport;
+                    }
+                },
+                columns: [
+                    { data: 'mudurlukAdi' },
+                    { data: 'machineType' },
+                    { data: 'machineCode' },
+                    { data: 'machineName' },
+                    { data: 'signalType' },
+                    { data: 'productivityCalculationMethod' },
+
+                    { data: 'processStartDate' },
+
+                    { data: 'shiftId' },
+                    { data: 'oee' },
+                    { data: 'totalShiftTime' },
+                    { data: 'totalApprove' },
+                    { data: 'totalPD' },
+                    { data: 'totalA' },
+                    { data: 'totalP' },
+                    { data: 'perfA' },
+                    { data: 'perfP' },
+                    { data: 'perfQ' }
+                ]
+            });
+        });
+    </script>
+
+
+
+}
