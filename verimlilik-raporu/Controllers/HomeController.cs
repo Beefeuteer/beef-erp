@@ -39,19 +39,48 @@ namespace verimlilik_raporu.Controllers
 
 
         // This is an example controller action that calls PostSomeData.
-        public async Task<ActionResult> GetProductivityResults()
+        public async Task<ActionResult> GetProductivityResults(
+       DateTime startDatetemp,
+       DateTime endDate,
+       int[] departmentList,
+       int[] machineListtemp,
+       string[] machineTypeListtemp,
+       int[] shiftListtemp,
+       bool isViewPlannedStoptemp)
         {
             string url = "http://api.mikroportal.com/api/VerimlilikRaporlari/Productivity_Test";
             string token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3QiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9zaWQiOiIxOTEiLCJuYmYiOjE2Nzg5Njk1ODgsImV4cCI6MTY3OTgzMzU4OCwiaWF0IjoxNjc4OTY5NTg4LCJpc3MiOiJNaWtyb3BvcnRhbCBBcGkifQ.NJYRwSl4TR_dfyth2eRUoKA9K_ZJOKpNFjCJxwJRlFYPqdXkdjyhhwWT_6OVFhEuvykwJjBBtd3X-Q2sTKVbHg";
+
+            if (machineTypeListtemp == null)
+            {
+                machineTypeListtemp = new[] { "MONTAJ", "YM" };
+            }
+
+            if (machineListtemp == null)
+            {
+                machineListtemp = new[] { 76, 77 };
+            }
+
+            if (isViewPlannedStoptemp == false)
+            {
+                isViewPlannedStoptemp = false;
+            }
+            else isViewPlannedStoptemp = true;
+
+            if (shiftListtemp == null)
+            {
+                shiftListtemp = new[] { 1, 4 };
+            }
+
             var data = new
             {
                 departmentList = new[] { 2, 4 },
-                machineList = new[] { 76, 77 },
-                machineTypeList = new[] { "MONTAJ", "YM" },
-                shiftList = new[] { 1, 4 },
+                machineList = machineListtemp,
+                machineTypeList = machineTypeListtemp,
+                shiftList = shiftListtemp,
                 startDate = DateTime.Parse("2023-03-06T12:37:53.234Z"),
                 finishDate = DateTime.Parse("2023-03-16T12:37:53.234Z"),
-                isViewPlannedStop = false
+                isViewPlannedStop = isViewPlannedStoptemp,
             };
 
             try

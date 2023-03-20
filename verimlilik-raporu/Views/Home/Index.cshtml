@@ -3,84 +3,372 @@
 
 @{
     ViewData["Title"] = "Home Page";
-
 }
 
+<style>
+    .btn {
+        border: none;
+        color: white; /* White text */
+        padding: 12px 16px; /* Some padding */
+        font-size: 16px; /* Set a font size */
+        cursor: pointer; /* Mouse pointer on hover */
+    }
+
+        /* Darker background on mouse-over */
+        .btn:hover {
+            color: white;
+        }
+
+    .btn-primary {
+        background-color: #1c84c6;
+    }
+
+    .btn-danger {
+        background-color: #ed5565
+    }
+
+    .btn-warning {
+        background-color: #f8ac59
+    }
+
+    .btn-info {
+        background-color: #23c6c8
+    }
+
+    .bugrath {
+        color: red;
+        font-size: 1.3em;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    /* DATA TABLE STYLE */
+
+    .dataTable th {
+        word-wrap: break-word;
+    }
+
+    tr {
+        height: 90px;
+    }
+
+    td, th {
+        border: 1px solid #d9d9d9;
+    }
+
+        th.normal {
+            background-color: #f2f2f2;
+        }
+
+        th.rotate {
+            height: 150px;
+            padding: 0px;
+            font-weight: normal;
+            background-color: #f2f2f2;
+        }
+
+            th.rotate > div {
+                writing-mode: vertical-rl;
+                transform: rotate(-180deg);
+            }
+
+    .textH {
+        height: 150px;
+        text-align: center;
+        color: #404040;
+        font-size: 14px;
+    }
+
+    .textN {
+        text-align: left;
+        height: 85px;
+        color: #404040;
+        font-size: 14px;
+    }
+
+    .productivityCOL {
+        font-weight: 700;
+    }
+
+    .textCenterCol {
+        text-align: center;
+    }
+
+    .modalCol {
+        color: #3174c7;
+        /*text-decoration: underline;*/
+    }
+
+        .modalCol:hover {
+            color: #3174c795;
+            cursor: pointer;
+        }
+
+</style>
+
+<form method="post" action="/Home/GetProductivityResults">
+    <div class="d-flex justify-content-between flex-row">
+        <div>
+            <button type="button" class="btn btn-primary fa fa-close"></button>
+            <button type="button" class="btn btn-danger fa fa-trash"></button>
+            <button type="button" class="btn btn-warning fa fa-upload"></button>
+            <button type="button" class="btn btn-info fa fa-table"></button>
+            <button type="button" class="btn btn-info fa fa-info"></button>
+
+            <span class="bugrath"></span>
+
+        </div>
+
+        <div>
+            <input style="margin-left:auto;" type="checkbox" id="isViewPlannedStoptemp" name="isViewPlannedStoptemp">
+            <label for="isViewPlannedStoptemp">Kapalı Vardiyaları Göster:</label>
+        </div>
+    </div>
 
 
 
-<table id="myTable" class="table table-striped">
+    <div class="col">
+        <div class="row my-4">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="First name" aria-label="First name">
+            </div><div class="col">
+
+                <select class="form-select" id="machineListtemp" name="machineListtemp">
+                    <option selected>Makine Seçiniz</option>
+                    <option value="76">76</option>
+                    <option value="77">77</option>
+                </select>
+
+            </div><div class="col">
+
+                <select class="form-select" id="machineTypeListtemp" name="machineTypeListtemp">
+                    <option selected>Makine Tipi Seçiniz</option>
+                    <option value="MONTAJ">MONTAJ</option>
+                    <option value="YM">YM</option>
+                </select>
+
+            </div>
+        </div>
+        <div class="row my-4">
+            <div class="col">
+                <input type="datetime-local" class="form-control" id="startDatetemp" name="startDatetemp" placeholder="Start Date" aria-label="Başlangıç Tarihi">
+            </div><div class="col">
+                <input type="datetime-local" class="form-control" id="endDate" name="endDate" placeholder="End Date" aria-label="Bitiş Tarihi">
+            </div><div class="col">
+
+                <select class="form-select" id="shiftListtemp" name="shiftListtemp">
+                    <option selected>Vardiya Seçiniz</option>
+                    <option value="1">1</option>
+                    <option value="4">4</option>
+                </select>
+
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" style="margin-bottom: 30px;">Filtrele</button>
+</form>
+
+<table id="myTable" class="table table-striped cell-border display nowrap" style="width:100%">
     <thead>
         <tr>
-            <th>Müdürlük Adı</th>
-            <th>Makine Tipi</th>
-            <th>Makine Kodu</th>
-            <th>Makine Adı</th>
-            <th>Sinyal tipi</th>
-            <th>Verimlilik metodu</th>
-            <th>tarih</th>
-            <th>Vardiya</th>
-            <th style="background-color:red">Verimlilik (%)</th>
-            <th>Vardiya Süresi (dk)</th>
-            <th>Toplam Teyit (dk)</th>
-            <th>Toplam duruş PD (dk)</th>
-            <th>Toplam duruş A (dk)</th>
-            <th>Toplam duruş P (dk)</th>
-            <th>PERF A (%)</th>
-            <th>PERF P (%)</th>
-            <th>PERF Q (%)</th>
+            <th class="normal">
+                <div class="textN">
+                    Müdürlük Adı
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Makine Tipi
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Makine Kodu
+                    </div>
+                </div>
+            </th>
+
+            <th class="normal">
+                <div class="textN">
+                    Makine Adı
+                </div>
+            </th>
+
+            <th class="normal">
+                <div class="textN">
+                    Sinyal <br /> tipi
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Verimlilik metodu
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        tarih
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Vardiya
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate" style="background-color:red;">
+                <div>
+                    <div class="textH" style="color: white;">
+                        Verimlilik (%)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Vardiya <br /> Süresi (dk)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Toplam <br /> Teyit (dk)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Toplam <br /> duruş PD (dk)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Toplam <br /> duruş A (dk)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        Toplam <br /> duruş P (dk)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        PERF A (%)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        PERF P (%)
+                    </div>
+                </div>
+            </th>
+
+            <th class="rotate">
+                <div>
+                    <div class="textH">
+                        PERF Q (%)
+                    </div>
+                </div>
+            </th>
+
         </tr>
     </thead>
-
-    <tbody>
-    </tbody>
-
 </table>
 
-
 @section Scripts {
-    @*    <script>
-        $(document).ready(function () {
-            $('#myTable').DataTable({
-                pagingType: 'full_numbers',
-                scrollX: true,
-
-            });
-        });
-    </script>
-
-
-     <script>
-        $(document).ready(function () {
-            $.ajax({
-                type: "POST",
-                url: "@Url.Action("GetProductivityResults", "Home")",
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error: " + error);
-                }
-            });
-        });
-    </script>*@
-
-
     <script>
         $(document).ready(function () {
             $('#myTable').DataTable({
+
                 pagingType: 'full_numbers',
                 scrollX: true,
+                select: true,
+
+                // burada 6. indexte bulunan date değerinin formatını düzenliyoruz
+                columnDefs: [
+                    {
+                        targets: 6,
+                        render: DataTable.render.date(),
+                    },
+
+                    {
+                        targets: 8,
+                        className: "productivityCOL",
+                    },
+
+                    {
+                        targets: "_all",
+                        className: "textCenterCol",
+                    },
+
+                    {
+                        targets: 0,
+                        className: "modalCol",
+                    }
+                ],
+
+                // Responsiveliği bozuyor ve bazı columnların gözükmesini engelliyor
+                // kapalı durumda ise modal gözükmüyor
+
+                //responsive: {
+                //details: {
+                //    display: $.fn.dataTable.Responsive.display.modal({
+                //        header: function (row) {
+                //            var data = row.data();
+                //            return 'Details for ' + data[2] + ' ' + data[1];
+                //        }
+                //    }),
+                //    renderer: $.fn.dataTable.Responsive.renderer.tableAll({
+                //        tableClass: 'table'
+                //    })
+                //},
+                //},
+
                 ajax: {
                     type: "POST",
                     url: "@Url.Action("GetProductivityResults", "Home")",
                     dataSrc: function (data) {
-                        // do any data manipulation if needed
+
+                        var mikroporProductivityAverage = data.mikroporProductivityAverage;
+
+                        // json datasından gelen mikroporProductivityAverage bilgisini yukarıdaki span elementine yolluyor
+                        $('.bugrath').text(mikroporProductivityAverage);
 
                         console.log("selamlar", data)
                         return data.productivityReport;
                     }
                 },
+
                 columns: [
                     { data: 'mudurlukAdi' },
                     { data: 'machineType' },
@@ -88,9 +376,7 @@
                     { data: 'machineName' },
                     { data: 'signalType' },
                     { data: 'productivityCalculationMethod' },
-
                     { data: 'processStartDate' },
-
                     { data: 'shiftId' },
                     { data: 'oee' },
                     { data: 'totalShiftTime' },
@@ -100,12 +386,10 @@
                     { data: 'totalP' },
                     { data: 'perfA' },
                     { data: 'perfP' },
-                    { data: 'perfQ' }
+                    { data: 'perfQ' },
                 ]
             });
         });
+
     </script>
-
-
-
 }
